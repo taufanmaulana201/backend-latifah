@@ -1,13 +1,12 @@
-import Product from "../models/ProductModel.js";
+import Pengeluaran from "../models/Pengeluaran.js";
 import User from "../models/UserModel.js";
 import { Op } from "sequelize";
 
-export const getProducts = async (req, res) => {
+export const getPengeluaran = async (req, res) => {
   try {
     let response;
     if (req.role === "admin") {
-      response = await Product.findAll({
-        attributes: ["uuid", "name", "price"],
+      response = await Pengeluaran.findAll({
         include: [
           {
             model: User,
@@ -16,8 +15,7 @@ export const getProducts = async (req, res) => {
         ],
       });
     } else {
-      response = await Product.findAll({
-        attributes: ["uuid", "name", "price"],
+      response = await Pengeluaran.findAll({
         where: {
           userId: req.userId,
         },
@@ -35,9 +33,9 @@ export const getProducts = async (req, res) => {
   }
 };
 
-export const getProductById = async (req, res) => {
+export const getPengeluaranById = async (req, res) => {
   try {
-    const product = await Product.findOne({
+    const product = await Pengeluaran.findOne({
       where: {
         uuid: req.params.id,
       },
@@ -45,8 +43,7 @@ export const getProductById = async (req, res) => {
     if (!product) return res.status(404).json({ msg: "Data tidak ditemukan" });
     let response;
     if (req.role === "admin") {
-      response = await Product.findOne({
-        attributes: ["uuid", "name", "price"],
+      response = await Pengeluaran.findOne({
         where: {
           id: product.id,
         },
@@ -58,8 +55,7 @@ export const getProductById = async (req, res) => {
         ],
       });
     } else {
-      response = await Product.findOne({
-        attributes: ["uuid", "name", "price"],
+      response = await Pengeluaran.findOne({
         where: {
           [Op.and]: [{ id: product.id }, { userId: req.userId }],
         },
@@ -77,32 +73,33 @@ export const getProductById = async (req, res) => {
   }
 };
 
-export const createProduct = async (req, res) => {
-  const { name, price } = req.body;
+export const createPengeluaran = async (req, res) => {
+  const { name, price, catatan } = req.body;
   try {
-    await Product.create({
-      name: name,
-      price: price,
+    await Pengeluaran.create({
+      name,
+      price,
+      catatan,
       userId: req.userId,
     });
-    res.status(201).json({ msg: "Product Created Successfuly" });
+    res.status(201).json({ msg: "Pengeluaran Created Successfuly" });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
 };
 
-export const updateProduct = async (req, res) => {
+export const updatePengeluaran = async (req, res) => {
   try {
-    const product = await Product.findOne({
+    const product = await Pengeluaran.findOne({
       where: {
         uuid: req.params.id,
       },
     });
     if (!product) return res.status(404).json({ msg: "Data tidak ditemukan" });
-    const { name, price } = req.body;
+    const { name, price, catatan } = req.body;
     if (req.role === "admin") {
-      await Product.update(
-        { name, price },
+      await Pengeluaran.update(
+        { name, price, catatan },
         {
           where: {
             id: product.id,
@@ -112,8 +109,8 @@ export const updateProduct = async (req, res) => {
     } else {
       if (req.userId !== product.userId)
         return res.status(403).json({ msg: "Akses terlarang" });
-      await Product.update(
-        { name, price },
+      await Pengeluaran.update(
+        { name, price, catatan },
         {
           where: {
             [Op.and]: [{ id: product.id }, { userId: req.userId }],
@@ -121,23 +118,22 @@ export const updateProduct = async (req, res) => {
         }
       );
     }
-    res.status(200).json({ msg: "Product updated successfuly" });
+    res.status(200).json({ msg: "Pengeluaran updated successfuly" });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
 };
 
-export const deleteProduct = async (req, res) => {
+export const deletePengeluaran = async (req, res) => {
   try {
-    const product = await Product.findOne({
+    const product = await Pengeluaran.findOne({
       where: {
         uuid: req.params.id,
       },
     });
     if (!product) return res.status(404).json({ msg: "Data tidak ditemukan" });
-    const { name, price } = req.body;
     if (req.role === "admin") {
-      await Product.destroy({
+      await Pengeluaran.destroy({
         where: {
           id: product.id,
         },
@@ -145,13 +141,13 @@ export const deleteProduct = async (req, res) => {
     } else {
       if (req.userId !== product.userId)
         return res.status(403).json({ msg: "Akses terlarang" });
-      await Product.destroy({
+      await Pengeluaran.destroy({
         where: {
           [Op.and]: [{ id: product.id }, { userId: req.userId }],
         },
       });
     }
-    res.status(200).json({ msg: "Product deleted successfuly" });
+    res.status(200).json({ msg: "Pengeluaran deleted successfuly" });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
