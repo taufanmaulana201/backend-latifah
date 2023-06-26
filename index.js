@@ -40,8 +40,10 @@ app.use(
 app.use(
   cors({
     credentials: true,
-    origin:
+    origin: [
       "https://frontend-latifah-lamo7lbtq-taufanmaulana201201-gmailcom.vercel.app",
+      "http://localhost:3000",
+    ],
   })
 );
 
