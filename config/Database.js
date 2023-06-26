@@ -4,6 +4,7 @@ import { Sequelize } from "sequelize";
 //   host: "localhost",
 //   dialect: "postgres",
 // });
+
 const db = new Sequelize("railway", "postgres", "L9kY6Rx9BsT2dZQuTpXc", {
   host: "containers-us-west-209.railway.app",
   port: 6626,
