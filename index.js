@@ -40,7 +40,7 @@ app.use(
 app.use(
   cors({
     credentials: true,
-    origin: ["http://localhost:3000", "https://frontend-latifah.vercel.app/"],
+    origin: "https://frontend-latifah.vercel.app/",
   })
 );
 
