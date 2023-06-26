@@ -38,10 +38,11 @@ app.use(
 );
 
 app.use(
-  cors({
-    credentials: true,
-    origin: "https://frontend-latifah.vercel.app/",
-  })
+  cors()
+  // {
+  // credentials: true,
+  // origin: "https://frontend-latifah.vercel.app",
+  // }
 );
 
 app.use(express.json());
