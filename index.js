@@ -32,7 +32,8 @@ app.use(
     saveUninitialized: true,
     store: store,
     cookie: {
-      secure: "auto",
+      // secure: "auto",
+      httpOnly: false,
     },
   })
 );
@@ -40,10 +41,8 @@ app.use(
 app.use(
   cors({
     credentials: true,
-    origin: [
+    origin:
       "https://frontend-latifah-lamo7lbtq-taufanmaulana201201-gmailcom.vercel.app",
-      "http://localhost:3000",
-    ],
   })
 );
 
